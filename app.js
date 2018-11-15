@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 
-const app = express()
+const app = express();
 
 const port = parseInt(process.env.PORT,10 )|| 5000;
 app.use(bodyParser.json());
@@ -17,3 +17,7 @@ app.get('/', (req,res) =>{
 app.listen(port, (err) =>{
     console.log('server is up and running');
 });
+
+
+
+
