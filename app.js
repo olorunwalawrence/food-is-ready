@@ -11,13 +11,9 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(logger('dev'));
 
 app.get('/', (req,res) =>{
-    message:'The app starts at this route you visited '
+    message:'The app starts at this route you visit '
 });
 
 app.listen(port, (err) =>{
     console.log('server is up and running');
 });
-
-
-
-
