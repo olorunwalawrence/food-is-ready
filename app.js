@@ -10,9 +10,9 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.use(logger('dev'));
 
-app.get('/', (req,res) =>{
-    message:'The app starts at this route you visit '
-});
+app.get('/',(req,res) => res.status().json({
+    message:'this is the application home page'
+}));
 
 app.listen(port, (err) =>{
     console.log('server is up and running');
