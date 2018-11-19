@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import { config } from 'dotenv';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import db from '../models/index';
 import insert from '../queries/insert';
 
@@ -33,7 +34,20 @@ export default class Users {
     ];
 
     db.query(userSignup, userValues).then((newUser) => {
-      res.send(newUser);
+      const userid = newUser.rows[0];
+
+      const token = jwt.sign({ userid, email, username }, secret, { expiresIn: '10h' });
+
+      res.status(200).json({
+        success: true,
+        message: 'user successfully created',
+        user: {
+          username,
+          email,
+          token
+        }
+
+      });
     }).catch((err) => {
       res.send(err.message);
     });
