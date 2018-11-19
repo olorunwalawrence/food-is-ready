@@ -1,5 +1,4 @@
-
-import pg from 'pg';
+import { Pool } from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -10,11 +9,13 @@ const config = {
   idleTimeoutMillis: 30000
 };
 
-const client = new pg.Client(config);
+const pool = new Pool(config);
 
-client.connect().then(() => {
+pool.connect().then(() => {
   console.log('database connected successfully');
 }).catch((err) => {
   console.log(err);
 });
-export default client;
+
+
+export default pool;
