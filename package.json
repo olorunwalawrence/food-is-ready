@@ -10,7 +10,7 @@
     "migrate": "babel-node server/models/createTables.js --exit 1",
     "unmigrate": "babel-node server/models/undoTable/index.js",
     "build": "babel server -d build",
-    "heroku-postbuild":"npm run migrate"
+    "heroku-postbuild": "npm run migrate"
   },
   "repository": {
     "type": "git",
@@ -32,13 +32,13 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "pg": "^7.6.1",
-    "pg-pool": "^2.0.4"
-  },
-  "devDependencies": {
+    "pg-pool": "^2.0.4",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.4",
-    "babel-preset-env": "^1.7.0",
+    "babel-preset-env": "^1.7.0"
+  },
+  "devDependencies": {
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
