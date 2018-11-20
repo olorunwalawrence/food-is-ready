@@ -18,4 +18,11 @@ const model = {
   }
 };
 
+model.signupTable().then(() => {
+  console.log('user table created successfully');
+}).catch((err) => {
+  console.log(err.message);
+});
+
+
 export default model;
