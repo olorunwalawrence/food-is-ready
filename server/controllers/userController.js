@@ -4,6 +4,10 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../models/index';
 import insert from '../queries/insert';
+import find from '../queries/find';
+
+// require('../models/createtables');
+
 
 const { userSignup } = insert;
 
@@ -34,7 +38,7 @@ export default class Users {
     ];
 
     db.query(userSignup, userValues).then((newUser) => {
-      const userid = newUser.rows[0];
+      const { userid } = newUser.rows[0];
 
       const token = jwt.sign({ userid, email, username }, secret, { expiresIn: '10h' });
 
@@ -48,6 +52,14 @@ export default class Users {
         }
 
       });
+    }).catch((err) => {
+      res.send(err.message);
+    });
+  }
+
+  static findAllUser(req, res) {
+    db.query(find.getalluser).then((users) => {
+      res.json(users);
     }).catch((err) => {
       res.send(err.message);
     });
