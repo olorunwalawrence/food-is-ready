@@ -10,6 +10,7 @@ import find from '../queries/find';
 
 
 const { userSignup } = insert;
+const { getalluser, findbyemail } = find;
 
 config();
 const secret = process.env.SECRET;
@@ -50,15 +51,43 @@ export default class Users {
           email,
           token
         }
-
       });
     }).catch((err) => {
       res.send(err.message);
     });
   }
 
+
+  static userLogin(req, res) {
+    const { email, password, username } = req.body;
+    const userEmail = [email.trim()];
+
+    db.query(findbyemail, userEmail).then((user) => {
+      if (user.rows[0] && bcrypt.compareSync(password.trim(), user.rows[0].password)) {
+        const { userid, username } = req.body;
+
+        const token = jwt.sign({ userid, email, username }, secret, { expiresIn: '10h' });
+        return res.status(200).json({
+          success: true,
+          message: `${username.toUpperCase()} is successfully logged in.`,
+          result: { username, email, token }
+        });
+      }
+      return res.status(400).json({
+        success: false,
+        message: 'login credentials is incorrect '
+      });
+    }).catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: `their is an internal/server error ${err.message}`
+      });
+    });
+  }
+
+
   static findAllUser(req, res) {
-    db.query(find.getalluser).then((users) => {
+    db.query(getalluser).then((users) => {
       res.json(users);
     }).catch((err) => {
       res.send(err.message);
