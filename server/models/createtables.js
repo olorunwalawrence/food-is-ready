@@ -1,5 +1,7 @@
 import index from './index';
 
+require('./mealtable');
+
 const model = {
 
   signupTable() {
@@ -18,11 +20,6 @@ const model = {
   }
 };
 
-model.signupTable().then(() => {
-  console.log('user table created successfully');
-}).catch((err) => {
+model.signupTable().then(() => true).catch((err) => {
   console.log(err.message);
 });
-
-
-export default model;

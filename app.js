@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
-
+import cors from 'cors';
 import route from './server/routes/index';
 
 const app = express();
@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(logger('dev'));
-
+app.use(cors());
 app.get('/', (req, res) => res.status(200).json({
   message: 'this is the application home page'
 }));

@@ -2,19 +2,15 @@ import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import connect from '../config/config';
 
-const { production } = connect;
 dotenv.config();
 
-const config = {
-  production
-};
+const { production } = connect;
 
-const pool = new Pool(config);
+const pool = new Pool(production);
 
 pool.connect().then(() => {
-  console.log('database connected successfully');
 }).catch((err) => {
-  console.log(err);
+
 });
 
 
