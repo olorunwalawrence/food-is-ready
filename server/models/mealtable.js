@@ -15,10 +15,4 @@ const mealModel = {
 };
 
 
-mealModel.mealTable().then(() => {
-  console.log('meal table created successfully');
-}).catch((err) => {
-  console.log(err.message);
-});
-
 export default mealModel;
