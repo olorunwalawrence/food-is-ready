@@ -1,11 +1,9 @@
 import index from './index';
 
-require('./mealtable');
+import meal from './mealtable';
 
-const model = {
-
-  signupTable() {
-    const userTable = `
+const signupTable = () => {
+  const userTable = `
         CREATE TABLE IF NOT EXISTS users (
 
         userid serial PRIMARY KEY,
@@ -16,10 +14,17 @@ const model = {
         password VARCHAR(255) NOT NULL
         
         )`;
-    return index.query(userTable);
-  }
+  return index.query(userTable);
 };
 
-model.signupTable().then(() => true).catch((err) => {
+signupTable().then(() => {
+  console.log('user table created successfully');
+  meal.mealTable().then(() => {
+    console.log('meal table created successfully');
+    process.exit();
+  }).catch((err) => {
+    console.log(err.message);
+  });
+}).catch((err) => {
   console.log(err.message);
 });

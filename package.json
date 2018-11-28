@@ -11,7 +11,7 @@
     "test:dev": "nyc --reporter=html --reporter=text mocha server/test --compilers js:babel-core/register --timeout 50000ms --exit",
     "test": "npm run test:dev",
     "build": "babel server -d build",
-    "heroku-postbuild": "npm run migrate --exit"
+    "heroku-postbuild": "npm run migrate -- --exit"
   },
   "repository": {
     "type": "git",
