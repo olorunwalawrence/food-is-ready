@@ -3,27 +3,46 @@ import user from '../controllers/userController';
 import admin from '../controllers/admincontroller';
 import verifyUser from '../middleware/authentication';
 import findExisting from '../middleware/exitingUser';
-import inputValidation from '../validation/inputValidation';
+import Validator, { orderValidator } from '../validation/inputValidation';
 
-const { checkLogininput, CheckSignupinput } = inputValidation;
 
+const { createmealValidator } = Validator;
+const { orderMealValidator } = orderValidator;
 const { exitingUsername, existingEmail } = findExisting;
-const { createMeal, findAllUser } = admin;
+const { createMeal, findAllUser, findAllMeal } = admin;
 const {
   createUser,
   userLogin,
   getameal,
-  deleteAameal
+  deleteAameal,
+  encrptAdminPassCode,
+  requestMeal,
+  findAllrequestedMeal,
+  deleteMealRequest,
+  OrderAMeal,
+  selectOrederd,
+  finduserOrderById,
+  findAllUserOrders,
+  findAllrequestedMeals
 } = user;
 
 const router = express.Router();
-
-router.post('/createmeal', verifyUser, createMeal);
-router.post('/create', CheckSignupinput, exitingUsername, existingEmail, createUser);
-router.post('/login', checkLogininput, verifyUser, userLogin);
+router.post('/requestmeal', verifyUser, requestMeal);
+router.post('/order', orderMealValidator, verifyUser, OrderAMeal);
+router.post('/createmeal', createmealValidator, createMeal);
+router.post('/signup', exitingUsername, existingEmail, createUser);
+router.post('/login', userLogin);
 router.get('/getalluser', findAllUser);
-router.get('/getameal/:mealId', verifyUser, getameal);
+router.get('/getallmeal', findAllMeal);
+router.get('/getameal/:mealId', getameal);
 router.delete('/deleterequest/:mealid', verifyUser, deleteAameal);
+router.delete('/deleterequested/:requestid', verifyUser, deleteMealRequest);
+router.get('/update-admin-passcode', encrptAdminPassCode);
+router.get('/requestedmeal', verifyUser, findAllrequestedMeal);
+router.get('/requestedmeals', findAllrequestedMeals);
+router.get('/allorderedmeal', verifyUser, selectOrederd);
+router.get('/userorder', verifyUser, finduserOrderById);
+router.get('/alluserorder', findAllUserOrders);
 
 
 export default router;

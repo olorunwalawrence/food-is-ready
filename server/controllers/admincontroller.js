@@ -3,7 +3,7 @@ import db from '../models/index';
 import insert from '../queries/insert';
 import find from '../queries/find';
 
-const { getalluser } = find;
+const { getalluser, findallmeal } = find;
 const { createMeal } = insert;
 
 // create meal controller
@@ -13,21 +13,23 @@ class admin {
     const {
       mealname,
       price,
-      availability
+      image,
+      description
     } = req.body;
     const mealValue = [
 
       mealname,
       price,
-      availability
+      image,
+      description
 
     ];
 
     db.query(createMeal, mealValue).then((meals) => {
-      res.json(meals);
+      res.status(201).json(meals.rows[0]);
     }).catch((err) => {
       res.json({
-        message: err.message
+        msg: err.message
       });
     });
   }
@@ -44,7 +46,18 @@ class admin {
   }
 
 
-  // update meal controller
+  // find all meal
+  static findAllMeal(req, res) {
+    db.query(findallmeal)
+      .then(
+        availablemeal => res.status(200)
+          .json(availablemeal.rows)
+      )
+
+      .catch((err) => {
+        res.send(err.message);
+      });
+  }
 }
 
 export default admin;

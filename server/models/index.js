@@ -10,7 +10,7 @@ const pool = new Pool(production);
 
 pool.connect().then(() => {
 }).catch((err) => {
-
+  console.log(err.message);
 });
 
 

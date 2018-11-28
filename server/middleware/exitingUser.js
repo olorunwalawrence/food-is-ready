@@ -16,6 +16,8 @@ class findExisting {
         });
       }
       next();
+    }).catch((err) => {
+      res.json(err.message);
     });
   }
 
@@ -30,8 +32,8 @@ class findExisting {
         });
       }
       next();
-    }).catch(() => {
-
+    }).catch((err) => {
+      res.json(err.message);
     });
   }
 }

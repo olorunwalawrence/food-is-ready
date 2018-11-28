@@ -4,10 +4,11 @@ const mealModel = {
   mealTable() {
     const meal = `
         CREATE TABLE IF NOT EXISTS meal (
-            mealid serial PRIMARY KEY,
+            mealid SERIAL PRIMARY KEY,
             mealname VARCHAR(255) NOT NULL,
-            price NUMERIC NOT NULL,
-            availability VARCHAR NOT NULL
+            price VARCHAR(255) NOT NULL,
+            image TEXT NOT NULL,
+            description VARCHAR(255) NOT NULL
         )
     `;
     return index.query(meal);

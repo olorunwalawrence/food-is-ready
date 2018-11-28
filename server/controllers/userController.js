@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable require-jsdoc */
 import { config } from 'dotenv';
 import bcrypt from 'bcryptjs';
@@ -9,9 +10,12 @@ import Delete from '../queries/delete';
 
 const mailer = require('../utils/mail');
 
-const { findbyemail, findMealById } = find;
-const { userSignup } = insert;
-const { deletemeal } = Delete;
+const {
+  findbyemail, findMealById, UserOrder, orderedMeal,
+  findAllRequestByUserId, allUserOrder, allRequestOrder
+} = find;
+const { userSignup, mealrequest, orderMeal } = insert;
+const { deletemeal, deleteRequest } = Delete;
 
 
 config();
@@ -27,6 +31,7 @@ export default class Users {
       lastname,
       username,
       email,
+
     } = req.body;
 
     // eslint-disable-next-line no-sparse-arrays
@@ -69,7 +74,7 @@ export default class Users {
 
     db.query(findbyemail, userEmail).then((user) => {
       if (user.rows[0] && bcrypt.compareSync(password.trim(), user.rows[0].password)) {
-        const { userid, username } = req.body;
+        const { userid, username } = user.rows[0];
 
         const token = jwt.sign({ userid, email, username }, secret, { expiresIn: '10h' });
         return res.status(200).json({
@@ -97,7 +102,7 @@ export default class Users {
     db.query(findMealById, [mealId]).then((meal) => {
       res.status(200).json({
         success: true,
-        message: 'thank you for your patronage, your meal will be ready soon',
+        message: 'success',
         meal: meal.rows
       });
     }).catch((err) => {
@@ -107,6 +112,7 @@ export default class Users {
     });
   }
 
+  // delete a meal
   static deleteAameal(req, res) {
     const { mealid } = req.params;
     db.query(deletemeal, [mealid]).then((del) => {
@@ -118,5 +124,131 @@ export default class Users {
     }).catch((err) => {
       res.send(err.message);
     });
+  }
+
+  // delete a meal request
+  static deleteMealRequest(req, res) {
+    const { requestid } = req.params;
+    db.query(deleteRequest, [requestid]).then((del) => {
+      res.status(200).json({
+        success: true,
+        message: 'the selected meal request is deleted successfully',
+        del
+      });
+    }).catch((err) => {
+      res.send(err.message);
+    });
+  }
+
+  static encrptAdminPassCode(req, res) {
+    const passCode = bcrypt.hashSync(process.env.PASSCODE, 10);
+    return db.query('UPDATE users SET password=$1 WHERE email=$2', [passCode, process.env.EMAIL])
+      .then(user => res.status(200).json({ message: 'passcode updated', admin: user.rows[0] }))
+      .catch(err => console.log(err.message));
+  }
+
+
+  static requestMeal(req, res) {
+    const {
+      mealname,
+      price
+    } = req.body;
+    const { userid } = req.decoded;
+    const data = [
+      mealname.trim().toLowerCase(),
+      price,
+      userid
+    ];
+
+    db.query(mealrequest, data).then(resq => res.status(200).json({
+      resq
+    })).catch(err => console.log(err.messsage));
+  }
+
+
+  // find all requested meal
+  static findAllrequestedMeal(req, res) {
+    const { userid } = req.decoded;
+    db.query(findAllRequestByUserId, [userid])
+      .then(userRequest => res.status(200)
+        .json(userRequest.rows)).catch((err) => {
+        res.send(err.message);
+      });
+  }
+
+  // ############################
+  // order meals
+  static OrderAMeal(req, res) {
+    const { userid } = req.decoded;
+
+    const {
+      fullname,
+      email,
+      phone,
+      address,
+      bstop,
+      lga
+    } = req.body;
+
+    const OrderValue = [
+      fullname,
+      email,
+      phone,
+      address,
+      bstop,
+      lga,
+      userid
+    ];
+
+    db.query(orderMeal, OrderValue).then((orderinfo) => {
+      res.status(201).json(orderinfo.rows);
+    }).catch((err) => {
+      res.send(err.message);
+    });
+  }
+
+  // #############################
+
+  // ########################
+  // select all ordered food and send it to the order page
+
+  static selectOrederd(req, res) {
+    db.query(orderedMeal).then((foodordered) => {
+      res.status(200).json(foodordered.rows);
+    }).catch((err) => {
+      console.log(err.mesage);
+    });
+  }
+
+  // ######################
+  // select UserOrder meal by user id
+  static finduserOrderById(req, res) {
+    const { userid } = req.decoded;
+    db.query(UserOrder, [userid]).then((userorder) => {
+      res.status(200).json(userorder.rows);
+    }).catch((err) => {
+      res.send(err.message);
+    });
+  }
+
+  static findAllUserOrders(req, res) {
+    db.query(allUserOrder).then((userorder) => {
+      res.status(200).json(userorder.rows);
+    }).catch((err) => {
+      res.send(err.message);
+    });
+  }
+
+  /* =====================================
+  FIND ALL REQUESTed MEALS AND SEND THE
+   RESULT TO THE ADMIN
+===================================== */
+
+  static findAllrequestedMeals(req, res) {
+    db.query(allRequestOrder)
+      .then(userRequest => res.status(200)
+        .json(userRequest.rows)).catch((err) => {
+        res.send(err.message);
+      });
   }
 }
