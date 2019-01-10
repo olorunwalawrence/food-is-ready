@@ -1,4 +1,5 @@
 /* eslint-disable require-jsdoc */
+import { check } from 'express-validator/check';
 
 export default class checkNull {
   static fieldUndefined(req, res, next) {
@@ -23,28 +24,3 @@ export default class checkNull {
 
 // check for null and undefined in signup and login fields
 
-// export class checknull {
-//   static checkuserNull(req, res) {
-//     const body = req.body;
-
-//     const { username, password, email } = body;
-
-//     if (!username) {
-//       return res.status(424).json({
-//         message: 'username field is needed'
-//       });
-//     }
-
-//     if (!password) {
-//       return res.status(424).json({
-//         message: 'password field is needed'
-//       });
-//     }
-
-//     if (!email) {
-//       return res.status(424).json({
-//         message: 'password field is needed'
-//       });
-//     }
-//   }
-// }

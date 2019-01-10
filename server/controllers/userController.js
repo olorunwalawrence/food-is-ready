@@ -79,13 +79,12 @@ export default class Users {
         const token = jwt.sign({ userid, email, username }, secret, { expiresIn: '10h' });
         return res.status(200).json({
           success: true,
-          message: `${username.toUpperCase()} is successfully logged in.`,
           result: { username, email, token }
         });
       }
       return res.status(400).json({
         success: false,
-        message: 'login credentials is incorrect '
+        message: 'Login credentials is incorrect. '
       });
     }).catch((err) => {
       res.status(500).json({

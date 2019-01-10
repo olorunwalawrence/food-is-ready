@@ -3,13 +3,12 @@ import user from '../controllers/userController';
 import admin from '../controllers/admincontroller';
 import verifyUser from '../middleware/authentication';
 import findExisting from '../middleware/exitingUser';
-import Validator, { orderValidator } from '../validation/inputValidation';
+import validator from '../validation/inputValidation';
 
-
-const { createmealValidator } = Validator;
-const { orderMealValidator } = orderValidator;
+const { createmealValidator ,orderMealValidator, loginValidator, signupValidator } = validator;
 const { exitingUsername, existingEmail } = findExisting;
 const { createMeal, findAllUser, findAllMeal } = admin;
+
 const {
   createUser,
   userLogin,
@@ -28,10 +27,10 @@ const {
 
 const router = express.Router();
 router.post('/requestmeal', verifyUser, requestMeal);
-router.post('/order', orderMealValidator, verifyUser, OrderAMeal);
-router.post('/createmeal', createmealValidator, createMeal);
-router.post('/signup', exitingUsername, existingEmail, createUser);
-router.post('/login', userLogin);
+router.post('/order',orderMealValidator,verifyUser,OrderAMeal);
+router.post('/createmeal',createmealValidator, createMeal);
+router.post('/signup',signupValidator, exitingUsername, existingEmail, createUser);
+router.post('/login',loginValidator,userLogin);
 router.get('/getalluser', findAllUser);
 router.get('/getallmeal', findAllMeal);
 router.get('/getameal/:mealId', getameal);
