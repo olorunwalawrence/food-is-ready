@@ -4,9 +4,9 @@ import validator from 'validator';
 export default class Validator {
   static createmealValidator(req, res, next) {
     const {
- mealname, price, description, image 
-} = req.body;
-    if (validator.isEmpty(mealname && price && description && image)) {
+      mealname, price, description, image
+    } = req.body;
+    if (validator.isEmpty(mealname && price && description)) {
       return res.status(400).json({ message: 'Empty field detected' });
     }
     next();
@@ -14,11 +14,16 @@ export default class Validator {
 
   static orderMealValidator(req, res, next) {
     const {
- fullname, email, phonenumber, address, bstop, lga 
-} = req.body;
+      fullname,
+      email,
+      phone,
+      address,
+      bstop,
+      lga
+    } = req.body;
     if (
       validator.isEmpty(
-        fullname && email && phonenumber && address && bstop && lga
+        fullname && email && phone && address && bstop && lga
       )
     ) {
       return res.status(400).json({ message: 'Empty field detected' });
@@ -36,8 +41,8 @@ export default class Validator {
 
   static signupValidator(req, res, next) {
     const {
- firstname, lastname, username, email, password 
-} = req.body;
+      firstname, lastname, username, email, password
+    } = req.body;
     if (validator.isEmpty(firstname && lastname && username && email && password)) {
       return res.status(400).json({ message: 'Empty filed detected' });
     }

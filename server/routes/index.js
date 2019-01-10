@@ -5,7 +5,9 @@ import verifyUser from '../middleware/authentication';
 import findExisting from '../middleware/exitingUser';
 import validator from '../validation/inputValidation';
 
-const { createmealValidator ,orderMealValidator, loginValidator, signupValidator } = validator;
+const {
+ createmealValidator , orderMealValidator, loginValidator, signupValidator 
+} = validator;
 const { exitingUsername, existingEmail } = findExisting;
 const { createMeal, findAllUser, findAllMeal } = admin;
 
@@ -27,10 +29,10 @@ const {
 
 const router = express.Router();
 router.post('/requestmeal', verifyUser, requestMeal);
-router.post('/order',orderMealValidator,verifyUser,OrderAMeal);
-router.post('/createmeal',createmealValidator, createMeal);
-router.post('/signup',signupValidator, exitingUsername, existingEmail, createUser);
-router.post('/login',loginValidator,userLogin);
+router.post('/order', orderMealValidator, verifyUser, OrderAMeal);
+router.post('/createmeal', createmealValidator, verifyUser, createMeal);
+router.post('/signup', signupValidator, exitingUsername, existingEmail, createUser);
+router.post('/login', loginValidator, userLogin);
 router.get('/getalluser', findAllUser);
 router.get('/getallmeal', findAllMeal);
 router.get('/getameal/:mealId', getameal);
